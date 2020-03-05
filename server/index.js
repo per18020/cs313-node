@@ -31,6 +31,19 @@ if (!isDev && cluster.isMaster) {
     res.send('{"message":"Hello from the custom server!"}');
   });
 
+  // GET /api/week09/math?operation=sum&operands[]=1&operands[]=2...
+  app.get('/api/week09/math', (req, res) => {
+    res.set('Content-Type', 'application/json');
+    switch(req.query.operation) {
+      case "sum":
+        let sum = parseInt(req.query.operand1) + parseInt(req.query.operand2);
+        res.send(JSON.stringify({result: sum}));
+        break;
+      default:
+        break;
+    }
+  });
+
   // All remaining requests return the React app, so it can handle routing.
   app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
