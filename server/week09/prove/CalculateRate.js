@@ -1,6 +1,6 @@
-import { Map } from 'immutable';
+const { Map } = require('immutable');
 
-import { error } from './Constants';
+const error = -1;
 
 const lettersSReducer = (weight) => {
     switch (weight) {
@@ -52,8 +52,15 @@ const rateMap = Map({
     "First-Class Package Service—Retail": packageReducer
 })
 
-export default function calculateRate(postage, weight) {
+function calculateRate(postage, weight) {
     if (weight <= 0) return 0;
     let ceilingWeight = Math.ceil(weight);
-    return rateMap.get(postage)(ceilingWeight);
+
+    try {
+        return rateMap.get(postage)(ceilingWeight);
+    } catch (e) {
+        return error;
+    }
 }
+
+module.exports = calculateRate;

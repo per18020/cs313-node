@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 import Dropdown from '../../common/Dropdown';
-import calculateRate from './CalculateRate';
 import { postage, error as e } from './Constants';
 
 export default function PostalRateCalculator() {
@@ -12,11 +12,16 @@ export default function PostalRateCalculator() {
     const [error, setError] = useState(false);
 
     const handleCalculateClick = () => {
-        let calculatedRate = calculateRate(selectedPostage, weight);
-        if (calculatedRate === e) return setError(true);
-        setError(false);
-        setRate(calculatedRate);
-        setShowRate(true);
+        axios.post("/api/week09/prove", {
+            postage: selectedPostage,
+            weight
+        }).then(res => {
+            let calculatedRate = res.data.response;
+            if (calculatedRate === e) return setError(true);
+            setError(false);
+            setRate(calculatedRate);
+            setShowRate(true);
+        });
     }
 
     const handleBackClick = () => {
